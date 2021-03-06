@@ -1,0 +1,10 @@
+Flask~=1.1.2
+flask-sockets~=0.2.1
+selenium~=3.141.0
+pip~=20.3.3
+urllib3~=1.26.2
+gunicorn~=20.0.4
+psycopg2~=2.8.6
+pillow~=8.0.1
+pylint~=2.6.0
+pytest~=6.1.2

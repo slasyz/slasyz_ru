@@ -1,0 +1,11 @@
+{
+  "database": {
+    "host": "database",
+    "database": "slasyz_ru",
+    "user": "slasyz_ru",
+    "password": "slasyz_ru"
+  },
+  "server": {
+    "bind": "0.0.0.0:8000"
+  }
+}

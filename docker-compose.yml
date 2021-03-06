@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  gateway:
+    build: gateway
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+      - frontend
+
+  frontend:
+    build:
+      context: ./frontend
+
+  backend:
+    build:
+      context: ./backend
+    depends_on:
+      - database
+
+  database:
+    image: postgres:13.1
+    volumes:
+      - ./database/migrations:/docker-entrypoint-initdb.d/
+      - postgres_data:/volumes/postgresql/data/
+    environment:
+      - POSTGRES_USER=slasyz_ru
+      - POSTGRES_PASSWORD=slasyz_ru
+      - POSTGRES_DB=slasyz_ru
+
+volumes:
+  postgres_data:

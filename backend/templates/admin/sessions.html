@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin &mdash; Sessions</title>
+    <style>
+        td { padding-right: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Sessions</h1>
+    <table>
+        {% for session in sessions %}
+            <tr>
+                <td><a href="{{ session.url() }}">{{ session.uuid }}</a></td>
+                <td>{{ session.size }}</td>
+                <td>{{ session.clickpath_size }} bytes</td>
+                <td>{{ session.ip }}</td>
+                <td>{{ session.useragent }}</td>
+                <td>{{ session.cookie_uuid }}</td>
+                <td>{{ session.created.strftime('%Y/%m/%d %H:%M:%S %Z') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% if page_prev_link %}<a href="{{ page_prev_link }}">&leftarrow;</a>{% endif %}
+    <a href="{{ page_next_link }}">&rightarrow;</a>
+</body>
+</html>

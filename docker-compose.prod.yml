@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  gateway:
+    image: slasyz_ru-gateway:prod
+
+  frontend:
+    image: slasyz_ru-frontend:prod
+    build:
+      dockerfile: Dockerfile.prod
+
+  backend:
+    image: slasyz_ru-backend:prod
+    build:
+      dockerfile: Dockerfile.prod

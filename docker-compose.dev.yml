@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  gateway:
+    image: slasyz_ru-gateway:dev
+
+  frontend:
+    image: slasyz_ru-frontend:dev
+    build:
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8081:80
+    volumes:
+      - ./frontend/src:/src:ro  # Нужно для того, чтобы изменения автоматически подхватывались контейнером
+
+  backend:
+    image: slasyz_ru-backend:dev
+    build:
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8082:8000
+    volumes:
+      - ./backend/slasyz_ru:/app/slasyz_ru:ro  # Нужно для того, чтобы изменения автоматически подхватывались контейнером
+      - ./backend/templates:/app/templates:ro
+
+  database:
+    ports:
+      - 8083:5432
