@@ -41,26 +41,25 @@ lint.all: pylint
 .PHONY: prod
 prod:         ## run production server
 prod:
-	PYTHONUNBUFFERED=TRUE ./venv/bin/gunicorn \
-		--log-level INFO \
-		--access-logfile=- \
-		--disable-redirect-access-to-syslog \
-		-k flask_sockets.worker \
-		-c python:slasyz_ru.config \
-		"slasyz_ru.server.main:create_app()"
+	PYTHONUNBUFFERED=TRUE ./venv/bin/uvicorn \
+		--log-level info \
+		-k uvicorn.workers.UvicornWorker \
+		--host 0.0.0.0 \
+		--port 8000 \
+		--factory \
+		slasyz_ru.main:create_app
 
 
 .PHONY: dev
 dev:          ## run development server
 dev:
-	PYTHONUNBUFFERED=TRUE ./venv/bin/gunicorn \
-		--log-level DEBUG \
-		--access-logfile=- \
-		--disable-redirect-access-to-syslog \
+	PYTHONUNBUFFERED=TRUE ./venv/bin/uvicorn \
+		--log-level debug \
 		--reload \
-		-k flask_sockets.worker \
-		-c python:slasyz_ru.config \
-		"slasyz_ru.server.main:create_app()"
+		--host 0.0.0.0 \
+		--port 8000 \
+		--factory \
+		slasyz_ru.main:create_app
 
 
 .PHONY: pylint
@@ -68,9 +67,9 @@ pylint:       ## run pylint (with disabled checks specified in $DISABLE variable
 	cd ..; ./slasyz_ru/$(PYTHON_INTERPRETER) -m pylint ./slasyz_ru/slasyz_ru --rcfile="./slasyz_ru/pylintrc" --disable="$(DISABLE)"
 
 
-.PHONY: run.flask
-run.flask:    ## run using flask
-	PYTHONUNBUFFERED=TRUE ./venv/bin/python -m slasyz_ru.server.main
+.PHONY: run
+run:          ## run directly
+	PYTHONUNBUFFERED=TRUE ./venv/bin/python -m slasyz_ru.main
 
 
 .PHONY: tmux.restart
@@ -83,7 +82,7 @@ tmux.restart:
 
 .PHONY: tmux.start
 tmux.start:   ## start tmux session
-	tmux new-session -s ToxicTgBot -d "make run.gunicorn"
+	tmux new-session -s ToxicTgBot -d "make run.dev"
 
 
 .PHONY: tmux.stop

@@ -1,6 +1,6 @@
-# Foobar
+# slasyz_ru
 
-Sources of slasyz.ru webpage.
+Sources of https://slasyz.ru/ webpage.
 
 
 ## Usage

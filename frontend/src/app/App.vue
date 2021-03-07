@@ -1,7 +1,11 @@
 <template>
     <div id="app">
       <topbar />
-      <router-view></router-view>
+      <transition name="fade">
+        <keep-alive>
+          <router-view class="pt-2"></router-view>
+        </keep-alive>
+      </transition>
     </div>
 </template>
 

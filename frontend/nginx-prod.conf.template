@@ -1,0 +1,12 @@
+server {
+    listen 9000;
+    listen [::]:9000;
+
+    location / {
+        return 500;
+    }
+
+    location /static {
+        root /;
+    }
+}

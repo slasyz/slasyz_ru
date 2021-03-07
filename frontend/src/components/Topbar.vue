@@ -7,10 +7,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link :to="{ name: 'index' }" active-class="active" class="nav-link">Index</router-link>
+            <router-link :to="{ name: 'index' }" exact-active-class="active" class="nav-link">Index</router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{ name: 'calories' }" active-class="active" class="nav-link">Calories!!!)))!</router-link>
+            <router-link :to="{ name: 'calories' }" active-class="active" class="nav-link">Calories</router-link>
           </li>
         </ul>
       </div>
@@ -23,7 +23,7 @@
   // import 'bootstrap';
 
   export default {
-    name: "topbar"
+    name: "Topbar"
   }
 </script>
 

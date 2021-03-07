@@ -5,7 +5,7 @@
 import Vue from 'vue'
 import VueRouter from "vue-router";
 
-import { createRouter } from './router'
+import {createRouter} from '../router'
 import App from './App.vue'
 import '../styles/app.scss';
 
@@ -21,6 +21,5 @@ export function createApp () {
     components: { App }
   })
 
-  // return both the app and the router
   return { app, router }
 }

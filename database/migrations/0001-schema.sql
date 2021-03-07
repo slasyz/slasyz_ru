@@ -30,3 +30,25 @@ CREATE TABLE limits
     counter    int         NOT NULL,
     last_taken timestamptz NOT NULL
 );
+
+
+CREATE TABLE foods
+(
+    id   int  PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name text NOT NULL,
+
+    proteins decimal NOT NULL,
+    fats     decimal NOT NULL,
+    carbos  decimal NOT NULL,
+    calories decimal NOT NULL,
+
+    weight int,
+    price  int
+);
+
+CREATE TABLE eatings
+(
+    id      int         PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    food_id int         REFERENCES foods NOT NULL,
+    time    timestamptz NOT NULL
+);

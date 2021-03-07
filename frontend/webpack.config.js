@@ -43,6 +43,10 @@ module.exports = {
   mode: 'development',
   // stats: 'verbose',
 
+  resolve: {
+    extensions: ['.js', '.scss', '.vue'],
+  },
+
   module: {
     rules: [
       {
