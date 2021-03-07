@@ -20,9 +20,8 @@ services:
       - database
 
   database:
-    image: postgres:13.1
+    build: database
     volumes:
-      - ./database/migrations:/docker-entrypoint-initdb.d/
       - postgres_data:/volumes/postgresql/data/
     environment:
       - POSTGRES_USER=slasyz_ru

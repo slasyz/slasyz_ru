@@ -33,7 +33,7 @@ Project consists of four containers:
 
 ## Known issues
 
-- webpack hot reloading works only with polling when project running in WSL outside WSL directories (e.g. in /mnt/c/Users/...)
+- webpack hot reloading works only with polling when project running in WSL outside WSL directories (e.g. in `/mnt/c/Users/...`)
 - graceful shutdown of `backend` and `frontend` containers doesn't work correctly
 
 ## License

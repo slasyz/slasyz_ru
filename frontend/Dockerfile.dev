@@ -2,10 +2,10 @@ FROM node:14
 
 WORKDIR /
 
-COPY package.json yarn.lock /
+COPY ./package.json yarn.lock /
 RUN yarn install
 
-COPY src /src
-COPY webpack.config.js /
+COPY ./src /src
+COPY ./webpack.config.js /
 
 ENTRYPOINT yarn dev
