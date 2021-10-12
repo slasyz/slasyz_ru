@@ -7,7 +7,6 @@ PROJECT_DIR="/home/sl/deployments/slasyz_ru"
 PROJECT_LOG_DIR="/home/sl/logs/slasyz_ru"
 
 for file in $FILES_WITH_VARS; do
-  echo "replacing in $file"
   sed -i "s:###PROJECT_DIR###:$PROJECT_DIR:" "$file";
   sed -i "s:###PROJECT_LOG_DIR###:$PROJECT_LOG_DIR:" "$file";
 done;

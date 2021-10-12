@@ -15,10 +15,11 @@ https://syrovatsky.ru {
     import slasyz_ru
 }
 
-http://сыроватский.рф {
+# сыроватский.рф
+http://xn--80adtedvnhej8g.xn--p1ai {
     redir https://{host}{uri}
 }
-https://сыроватский.рф {
+https://xn--80adtedvnhej8g.xn--p1ai {
     import slasyz_ru
 }
 
