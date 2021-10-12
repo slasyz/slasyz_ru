@@ -1,0 +1,13 @@
+(slasyz_ru) {
+    root * ###PROJECT_DIR###/root
+    reverse_proxy /api/* localhost:8001
+    file_server
+}
+
+
+http://localhost {
+    redir https://{host}{uri}
+}
+https://localhost {
+    import slasyz_ru
+}

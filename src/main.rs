@@ -1,9 +1,14 @@
-use std::{thread::sleep, time};
+use warp::Filter;
 
-fn main() {
-    println!("hello world");
-    loop {
-        sleep(time::Duration::from_secs(10));
-        println!("step");
-    }
+#[tokio::main]
+async fn main() {
+    // GET /api/warp => 200 OK with body "Hello, warp!"
+    let hello = warp::path!("api" / String)
+        .map(|name| format!("Hello, {}!", name));
+
+    // TODO: access log
+
+    warp::serve(hello)
+        .run(([127, 0, 0, 1], 8001))
+        .await;
 }

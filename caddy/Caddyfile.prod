@@ -1,0 +1,33 @@
+(slasyz_ru) {
+    root * ###PROJECT_DIR###/root
+    reverse_proxy /api/* localhost:8001
+    file_server
+}
+
+
+www.syrovatsky.ru {
+    redir https://syrovatsky.ru{uri}
+}
+http://syrovatsky.ru {
+    redir https://{host}{uri}
+}
+https://syrovatsky.ru {
+    import slasyz_ru
+}
+
+http://сыроватский.рф {
+    redir https://{host}{uri}
+}
+https://сыроватский.рф {
+    import slasyz_ru
+}
+
+www.slasyz.ru {
+    redir https://slasyz.ru{uri}
+}
+http://slasyz.ru {
+    redir https://{host}{uri}
+}
+https://slasyz.ru {
+    import slasyz_ru
+}
