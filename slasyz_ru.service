@@ -1,0 +1,13 @@
+[Unit]
+Description=slasyz.ru HTTP server
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=20s
+
+[Service]
+Type=simple
+WorkingDirectory=/home/sl/deployments/slasyz_ru
+ExecStart=/home/sl/deployments/slasyz_ru/slasyz_ru
+Restart=always
+StandardOutput=append:/home/sl/logs/slasyz_ru/server-stdout.log
+StandardError=append:/home/sl/logs/slasyz_ru/server-stderr.log

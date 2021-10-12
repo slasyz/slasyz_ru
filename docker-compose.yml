@@ -1,32 +1,13 @@
-version: '3.7'
+version: '3.9'
 
 services:
-  gateway:
-    build: gateway
+  app:
+    build: .
+    command: ["/usr/local/bin/slasyz_ru"]
     ports:
-      - 8080:80
-    depends_on:
-      - backend
-      - frontend
-
-  frontend:
-    build:
-      context: ./frontend
-
-  backend:
-    build:
-      context: ./backend
-    depends_on:
-      - database
-
-  database:
-    build: database
+      - "127.0.0.1:8001:8001/tcp"
     volumes:
-      - postgres_data:/volumes/postgresql/data/
-    environment:
-      - POSTGRES_USER=slasyz_ru
-      - POSTGRES_PASSWORD=slasyz_ru
-      - POSTGRES_DB=slasyz_ru
+      - cache:/build/target
 
 volumes:
-  postgres_data:
+  cache:

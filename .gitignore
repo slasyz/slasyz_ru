@@ -1,2 +1,6 @@
-/notes.md
 /.idea
+/target
+/config.json
+.DS_Store
+
+/root/cv/*.pdf

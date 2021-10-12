@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Рефералки — Вячеслав Сыроватский</title>
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            width: 100%; height: 100%;
+            padding: 0; margin: 0;
+            font-size: 3vw;
+        }
+        #centered {
+            margin: 2em auto;
+            width: max-content;
+        }
+        h1 {
+            font-size: 4vw;
+            text-align: center;
+            font-weight: normal;
+            width: max-content;
+            margin: 0 auto;
+        }
+        a {
+            color: #0077ff;
+        }
+        a.code {
+            color: #0077ff;
+        }
+        a:hover, span.code:hover {
+            text-decoration: none;
+        }
+        span.code {
+            text-decoration: underline dashed;
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: '— ';
+            display: inline-block;
+            margin-top: 0.5em;
+            margin-bottom: 2em;
+        }
+        .code {
+            color: #ff3333;
+        }
+    </style>
+</head>
+<body>
+    <div id="centered">
+        <div class="block">
+            <h1>Такси</h1>
+            <ul>
+                <li><span class="title">Ситимобил:</span> <span class="code">CF6F7TY</span></li>
+            </ul>
+        </div>
+        <div class="block">
+            <h1>Каршеринги</h1>
+            <ul>
+                <li><span class="title">Яндекс.Драйв:</span> <span class="code">slasyz</span></li>
+                <li><span class="title">Ситидрайв:</span> <span class="code">p6BaGa</span></li>
+                <li><span class="title">Делимобиль:</span> <span class="code">REFSQ7GI</span></li>
+                <li><span class="title">Белка:</span> <span class="code">UBZO3063</span></li>
+            </ul>
+        </div>
+        <div class="block">
+            <h1>Еда</h1>
+            <ul>
+                <li><span class="title">Яндекс.Лавка:</span> <span class="code">INVEDAQRHKXRTP</a></li>
+                <li><span class="title">Кухня на районе:</span> <span class="code">1AF79D</span></li>
+            </ul>
+        </div>
+        <div class="block">
+            <h1>Продукты</h1>
+            <ul>
+                <li><span class="title">iGooods:</span> <span class="code">9X9RX3</span></li>
+            </ul>
+        </div>
+        <div class="block">
+            <h1>Банки</h1>
+            <ul>
+                <li><span class="title">Тинькофф:</span> <a href="https://www.tinkoff.ru/sl/1ZkOR2698Td" class="code">1ZkOR2698Td</a></li>
+            </ul>
+        </div>
+        <div class="block">
+            <h1>Разное</h1>
+            <ul>
+                <li><span class="title">Dropbox:</span> <a class="code" href="https://www.dropbox.com/referrals/AADK8AW4JwRl4g2bbnqhO7zGLIJC3jESCNc">AADK8AW4Jw...</a></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        var elements = document.getElementsByClassName("code");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("click", copyCode);
+        }
+
+        function copyCode(ev) {
+            var textArea = document.createElement("textarea");
+            textArea.value = ev.target.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+        }
+    </script>
+</body>
+</html>
