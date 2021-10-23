@@ -7,6 +7,7 @@ edition = "2018"
 chrono = "0.4"
 colored = "2"
 fern = "0.6"
+jsonwebtoken = "7"
 lazy_static = "1.4"
 log = "0.4"
 serde = { version = "1", features = ["derive"] }

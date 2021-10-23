@@ -1,10 +1,32 @@
 use colored::*;
 use log::{error, Level};
 use slasyz_ru::config::Config;
-use slasyz_ru::run;
-use std::process;
+use slasyz_ru::{run, token_generate, token_info};
+use std::error::Error;
+use std::{env, process};
 
 const CONFIG_FILENAME: &str = "config.json";
+
+enum Action {
+    TokenGenerate,
+    TokenInfo,
+    Run,
+}
+
+fn get_action(mut args: env::Args) -> Result<Action, Box<dyn Error>> {
+    args.next().ok_or("Cannot get program name.")?;
+
+    let action = match args.next() {
+        Some(val) => val,
+        None => return Ok(Action::Run),
+    };
+
+    match action.as_str() {
+        "generate" => Ok(Action::TokenGenerate),
+        "info" => Ok(Action::TokenInfo),
+        _ => Result::Err("Unknown subcommand.".into()),
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -38,7 +60,17 @@ async fn main() {
         process::exit(1);
     });
 
-    if let Err(err) = run(config).await {
+    let action = get_action(env::args()).unwrap_or_else(|err| {
+        error!("Error getting action: {}", err.to_string());
+        process::exit(1);
+    });
+
+    let result = match action {
+        Action::Run => run(config).await,
+        Action::TokenGenerate => token_generate(config),
+        Action::TokenInfo => token_info(config),
+    };
+    if let Err(err) = result {
         error!("{}", err.to_string());
         process::exit(1);
     }
