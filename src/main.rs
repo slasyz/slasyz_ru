@@ -1,7 +1,7 @@
 use colored::*;
 use log::{error, Level};
 use slasyz_ru::config::Config;
-use slasyz_ru::{run, token_generate, token_info};
+use slasyz_ru::{run, token_generate, token_info, toxic_test};
 use std::error::Error;
 use std::{env, process};
 
@@ -10,6 +10,7 @@ const CONFIG_FILENAME: &str = "config.json";
 enum Action {
     TokenGenerate,
     TokenInfo,
+    ToxicTest,
     Run,
 }
 
@@ -24,11 +25,12 @@ fn get_action(mut args: env::Args) -> Result<Action, Box<dyn Error>> {
     match action.as_str() {
         "generate" => Ok(Action::TokenGenerate),
         "info" => Ok(Action::TokenInfo),
+        "test" => Ok(Action::ToxicTest),
         _ => Result::Err("Unknown subcommand.".into()),
     }
 }
 
-#[tokio::main]
+#[actix_web::main]
 async fn main() {
     fern::Dispatch::new()
         .format(|out, message, record| {
@@ -48,6 +50,7 @@ async fn main() {
         })
         .level(log::LevelFilter::Debug)
         .level_for("hyper", log::LevelFilter::Info)
+        .level_for("reqwest", log::LevelFilter::Info)
         .chain(std::io::stderr())
         .apply()
         .unwrap_or_else(|err| {
@@ -69,6 +72,7 @@ async fn main() {
         Action::Run => run(config).await,
         Action::TokenGenerate => token_generate(config),
         Action::TokenInfo => token_info(config),
+        Action::ToxicTest => toxic_test(config).await,
     };
     if let Err(err) = result {
         error!("{}", err.to_string());
