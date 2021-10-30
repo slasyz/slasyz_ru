@@ -1,20 +1,18 @@
 pub mod config;
 mod handlers;
 mod jwt;
+mod middleware;
+pub mod server;
 mod toxic;
 
 use crate::config::Config;
 use crate::jwt::JWT;
-use actix_web::middleware::Logger;
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use chrono::TimeZone;
-use log::info;
 use serde_json::json;
 use serde_json::to_string_pretty;
 use std::error::Error;
 use std::io;
 use std::io::BufRead;
-use std::net::SocketAddr;
 
 fn read_line(prompt: &str) -> Result<String, Box<dyn Error>> {
     eprint!("{}", prompt);
@@ -67,29 +65,5 @@ pub async fn toxic_test(config: Config) -> Result<(), Box<dyn Error>> {
     let response = to_string_pretty(&response)?;
 
     eprintln!("{}", response);
-    Ok(())
-}
-
-pub async fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let _jwt = jwt::JWT::new(config.jwt.secret)?;
-
-    let toxic_client = toxic::ToxicClient::new(config.toxic.url);
-    let toxic_app_data =
-        web::Data::new(handlers::handler_toxic::ToxicHandlerData::new(toxic_client));
-
-    info!("Starting server");
-    HttpServer::new(move || {
-        App::new()
-            .wrap(Logger::default())
-            .app_data(toxic_app_data.clone())
-            .route("/test", web::get().to(&handlers::handler_test::get))
-            .route(
-                "/api/toxic/{id}",
-                web::post().to(&handlers::handler_toxic::post),
-            )
-    })
-    .bind(config.server.address)?
-    .run()
-    .await?;
     Ok(())
 }

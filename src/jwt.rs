@@ -40,17 +40,17 @@ impl JWT {
         Ok(token)
     }
 
-    pub fn is_valid(&self, token: String) -> Result<bool, Box<dyn Error>> {
+    pub fn is_valid(&self, token: impl Into<String>) -> Result<bool, Box<dyn Error>> {
         let token = self.get_info(token)?;
         Ok(chrono::Utc::now() < token.until)
     }
 
-    pub fn get_info(&self, token: String) -> Result<TokenInfo, Box<dyn Error>> {
+    pub fn get_info(&self, token: impl Into<String>) -> Result<TokenInfo, Box<dyn Error>> {
         let mut validation = Validation::default();
         validation.validate_exp = false;
 
         let token = decode::<Claims>(
-            &token,
+            token.into().as_str(),
             &DecodingKey::from_secret(self.secret.as_ref()),
             &validation,
         )?;

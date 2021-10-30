@@ -1,10 +1,8 @@
-use crate::toxic::ToxicClient;
-use actix_web::web::Json;
-use actix_web::{web, HttpResponse, Responder};
+use crate::server::Context;
 use lazy_static::lazy_static;
 use serde::Serialize;
-use serde_json::{json, Value};
 use std::collections::HashSet;
+use tide::{Request, StatusCode};
 
 lazy_static! {
     static ref METHODS: HashSet<&'static str> = {
@@ -16,40 +14,28 @@ lazy_static! {
     };
 }
 
-pub struct ToxicHandlerData {
-    client: ToxicClient,
-}
-
-impl ToxicHandlerData {
-    pub fn new(client: ToxicClient) -> ToxicHandlerData {
-        ToxicHandlerData { client }
-    }
-}
-
 #[derive(Serialize)]
 struct Error {
     error: String,
 }
 
-pub async fn post(
-    data: web::Data<ToxicHandlerData>,
-    method: web::Path<String>,
-    body: Json<Value>,
-) -> HttpResponse {
+pub async fn post(mut req: Request<Context>) -> tide::Result {
+    let method = req.param("method")?.to_string();
+
     if !METHODS.contains(method.as_str()) {
-        return HttpResponse::NotFound().json(Error {
-            error: "Method not found.".to_string(),
-        });
+        return Err(tide::Error::from_str(
+            StatusCode::NotFound,
+            "Method not found.",
+        ));
     }
 
-    match data
-        .client
-        .post(method.into_inner(), body.into_inner())
+    let request = req.body_json().await?;
+
+    let res = req
+        .state()
+        .toxic_client
+        .post(method, request)
         .await
-    {
-        Ok(val) => HttpResponse::Ok().json(val),
-        Err(err) => HttpResponse::InternalServerError().json(Error {
-            error: err.to_string(),
-        }),
-    }
+        .map_err(|err| tide::Error::from_str(StatusCode::InternalServerError, err.to_string()))?;
+    Ok(res.into())
 }

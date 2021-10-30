@@ -1,7 +1,7 @@
 use colored::*;
 use log::{error, Level};
 use slasyz_ru::config::Config;
-use slasyz_ru::{run, token_generate, token_info, toxic_test};
+use slasyz_ru::{server, token_generate, token_info, toxic_test};
 use std::error::Error;
 use std::{env, process};
 
@@ -30,14 +30,15 @@ fn get_action(mut args: env::Args) -> Result<Action, Box<dyn Error>> {
     }
 }
 
-#[actix_web::main]
+#[async_std::main]
 async fn main() {
     fern::Dispatch::new()
         .format(|out, message, record| {
             let message = match record.level() {
                 Level::Error => message.to_string().as_str().red().bold(),
+                Level::Warn => message.to_string().as_str().yellow(),
                 Level::Info => message.to_string().as_str().blue(),
-                Level::Debug => message.to_string().as_str().yellow(),
+                Level::Debug => message.to_string().as_str().cyan(),
                 _ => message.to_string().as_str().blue(),
             };
             out.finish(format_args!(
@@ -50,7 +51,8 @@ async fn main() {
         })
         .level(log::LevelFilter::Debug)
         .level_for("hyper", log::LevelFilter::Info)
-        .level_for("reqwest", log::LevelFilter::Info)
+        .level_for("isahc", log::LevelFilter::Info)
+        .level_for("surf", log::LevelFilter::Warn)
         .chain(std::io::stderr())
         .apply()
         .unwrap_or_else(|err| {
@@ -69,7 +71,7 @@ async fn main() {
     });
 
     let result = match action {
-        Action::Run => run(config).await,
+        Action::Run => server::run(config).await,
         Action::TokenGenerate => token_generate(config),
         Action::TokenInfo => token_info(config),
         Action::ToxicTest => toxic_test(config).await,

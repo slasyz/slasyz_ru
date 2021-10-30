@@ -1,18 +1,15 @@
-use crate::toxic::ToxicClient;
-use actix_web::web::Json;
-use actix_web::{web, HttpResponse, Responder};
-use lazy_static::lazy_static;
+use crate::server::Context;
 use serde::Serialize;
-use serde_json::{json, Value};
-use std::collections::HashSet;
+use tide::Body;
 
 #[derive(Serialize)]
 struct TestResult {
     status: String,
 }
 
-pub async fn get() -> HttpResponse {
-    HttpResponse::Ok().json(TestResult {
+pub async fn get(mut _req: tide::Request<Context>) -> tide::Result {
+    let res = Body::from_json(&TestResult {
         status: "ok".to_string(),
-    })
+    })?;
+    Ok(res.into())
 }
