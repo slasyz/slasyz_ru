@@ -2,17 +2,35 @@
 
 set -e
 
-FILES_WITH_VARS="/home/sl/.config/systemd/user/slasyz_ru.service /home/sl/deployments/slasyz_ru/caddy/Caddyfile.prod"
-PROJECT_DIR="/home/sl/deployments/slasyz_ru"
-PROJECT_LOG_DIR="/home/sl/logs/slasyz_ru"
+cd "$(dirname "$0")"/.. || exit 1
+
+echo "-> Installing files"
+
+cp ./slasyz_ru.service ~/.config/systemd/user/
+cp ./caddy/Caddyfile.prod ~/caddy/slasyz_ru.caddy
+
+echo "-> Replacing variables"
+
+FILES_WITH_VARS="/home/sl/.config/systemd/user/slasyz_ru.service /home/sl/caddy/slasyz_ru.caddy"
+
+PROJECT_DIR="$(pwd)"
+export PROJECT_DIR
+export PROJECT_LOG_DIR="/home/sl/logs/slasyz_ru"
 
 for file in $FILES_WITH_VARS; do
-  sed -i "s:###PROJECT_DIR###:$PROJECT_DIR:" "$file";
-  sed -i "s:###PROJECT_LOG_DIR###:$PROJECT_LOG_DIR:" "$file";
+  tmp=$(mktemp)
+  envsubst < "$file" > "$tmp";
+  mv "$tmp" "$file";
 done;
+
+chmod a+r ~/caddy/slasyz_ru.caddy
+
+echo "-> Reloading everything"
 
 systemctl --user daemon-reload
 systemctl --user restart slasyz_ru
 # Add this line to sudoers file to reload Caddy without password:
 #  %sudo ALL=NOPASSWD: /bin/systemctl reload caddy
 sudo systemctl reload caddy
+
+echo "-> Installation is done"

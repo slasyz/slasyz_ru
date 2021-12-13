@@ -7,7 +7,9 @@ services:
     ports:
       - "127.0.0.1:8001:8001/tcp"
     volumes:
-      - cache:/target  # TODO: doesn't work
+      - cache_target:/target
+      - cache_cargo:/root/target
 
-volumes:
-  cache:
+volumes:  # TODO: wtf I wrote
+  cache_target:
+  cache_cargo:

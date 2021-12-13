@@ -12,22 +12,29 @@ fi
 
 SRC="./"
 DEST="$1:~/deployments/slasyz_ru/"
+BINARY="$(mktemp)"
 
+
+echo "-> Compiling binary"
+
+podman-compose build
+podman-compose up --no-start  # TODO: --force-recreate
+podman cp slasyz_ru_app_1:/usr/local/bin/slasyz_ru - > /tmp/slasyz_ru.tar
+tar xf /tmp/slasyz_ru.tar --directory /tmp
+rm /tmp/slasyz_ru.tar
+mv /tmp/slasyz_ru "$BINARY"
+
+
+echo "-> Copying files"
 
 rsync -avz --delete \
   --exclude='/.git' --filter="dir-merge,- .gitignore" \
   "$SRC" "$DEST"
+rsync -avz --delete "$SRC/root/cv/" "$DEST/root/cv/"
+scp "$SRC/config.json" "$DEST/config.json"
+scp "$BINARY" "$DEST/slasyz_ru_new"
+rm "$BINARY"
 
-
-docker compose build
-docker compose create --force-recreate
-docker cp slasyz_ru_app_1:/usr/local/bin/slasyz_ru - > /tmp/slasyz_ru.tar
-tar xf /tmp/slasyz_ru.tar --directory /tmp
-scp /tmp/slasyz_ru "$DEST"
-rm /tmp/slasyz_ru.tar /tmp/slasyz_ru
-
-scp "$SRC/config.json" "$1:/etc/slasyz_ru/config.json"
-scp "$SRC/slasyz_ru.service" "$1:~/.config/systemd/user/"
 ssh "$1" "/bin/bash ~/deployments/slasyz_ru/scripts/install.sh"
 
-echo "-> Done."
+echo "-> Deployment is done"

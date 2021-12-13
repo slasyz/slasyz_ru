@@ -1,5 +1,5 @@
 (slasyz_ru) {
-    root * ###PROJECT_DIR###/root
+    root * ${PROJECT_DIR}/root
     reverse_proxy /api/* localhost:8001
     file_server
 }
