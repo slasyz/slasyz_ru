@@ -2,6 +2,7 @@
     root * ${PROJECT_DIR}/root
     reverse_proxy /api/* localhost:8001
     file_server
+    tls slasyz@gmail.com
 }
 
 
@@ -30,5 +31,15 @@ http://slasyz.ru {
     redir https://{host}{uri}
 }
 https://slasyz.ru {
+    import slasyz_ru
+}
+
+www.slasyz.dev {
+    redir https://slasyz.dev{uri}
+}
+http://slasyz.dev {
+    redir https://{host}{uri}
+}
+https://slasyz.dev {
     import slasyz_ru
 }
